@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String
+  role      UserRole
+  progress  UserProgress[]
+}
+
+model Subject {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  topics      Topic[]
+  progress    UserProgress[]
+}
+
+model Topic {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  videoUrl    String
+  subjectId   Int
+  subject     Subject   @relation(fields: [subjectId], references: [id])
+  progress    UserProgress[]
+}
+
+model UserProgress {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  subjectId Int?
+  subject   Subject? @relation(fields: [subjectId], references: [id])
+  topicId   Int?
+  topic     Topic?   @relation(fields: [topicId], references: [id])
+  completed Boolean  @default(false)
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
