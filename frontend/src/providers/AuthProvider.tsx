@@ -2,7 +2,7 @@
 
 import { authService } from "@/lib/api";
 import { AuthContextType, LoginCredentials, RegisterCredentials, User } from "@/types/auth"
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from "react"
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
